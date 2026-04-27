@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Problem Corpus"
+  short_description: "Scan problem/normal for duplicates, gaps, and structure issues"
+  default_prompt: "Use $audit-problem-corpus to summarize the health of the generated problem corpus."

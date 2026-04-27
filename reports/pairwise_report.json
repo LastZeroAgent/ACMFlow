@@ -1,0 +1,166 @@
+{
+  "problem": "problem/normal/回文数判定",
+  "workspace": "D:\\CodeHub\\Local\\CreateProblemAPI",
+  "total_tests": 10,
+  "passed": false,
+  "solutions": {
+    "solution.cpp": {
+      "file": "problem\\normal\\回文数判定\\code\\solution.cpp",
+      "tests": [
+        {
+          "test": "1.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpgcg1k2ir'"
+        },
+        {
+          "test": "10.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpvhcys04a'"
+        },
+        {
+          "test": "2.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpwfxjiv32'"
+        },
+        {
+          "test": "3.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpcuq0f6ut'"
+        },
+        {
+          "test": "4.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpxekuwuow'"
+        },
+        {
+          "test": "5.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpb_d07ifs'"
+        },
+        {
+          "test": "6.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpxcqretzs'"
+        },
+        {
+          "test": "7.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpux6b0_0t'"
+        },
+        {
+          "test": "8.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmp1tjkj6m9'"
+        },
+        {
+          "test": "9.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpeqpmqkih'"
+        }
+      ],
+      "success_count": 0
+    },
+    "solution.java": {
+      "file": "problem\\normal\\回文数判定\\code\\solution.java",
+      "tests": [
+        {
+          "test": "1.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpdxwif5qg'"
+        },
+        {
+          "test": "10.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpirndjymc'"
+        },
+        {
+          "test": "2.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpcccc4zcx'"
+        },
+        {
+          "test": "3.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpi02tp6dd'"
+        },
+        {
+          "test": "4.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpwhj6pi_a'"
+        },
+        {
+          "test": "5.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpcbjxg78t'"
+        },
+        {
+          "test": "6.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpebjicl_s'"
+        },
+        {
+          "test": "7.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpybaw9zpx'"
+        },
+        {
+          "test": "8.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmp4hqdnan1'"
+        },
+        {
+          "test": "9.in",
+          "status": "error",
+          "error": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\x_up\\\\AppData\\\\Local\\\\Temp\\\\tmpk5i5dhmk'"
+        }
+      ],
+      "success_count": 0
+    },
+    "solution.py": {
+      "file": "problem\\normal\\回文数判定\\code\\solution.py",
+      "tests": [
+        {
+          "test": "1.in",
+          "status": "success"
+        },
+        {
+          "test": "10.in",
+          "status": "success"
+        },
+        {
+          "test": "2.in",
+          "status": "success"
+        },
+        {
+          "test": "3.in",
+          "status": "success"
+        },
+        {
+          "test": "4.in",
+          "status": "success"
+        },
+        {
+          "test": "5.in",
+          "status": "success"
+        },
+        {
+          "test": "6.in",
+          "status": "success"
+        },
+        {
+          "test": "7.in",
+          "status": "success"
+        },
+        {
+          "test": "8.in",
+          "status": "success"
+        },
+        {
+          "test": "9.in",
+          "status": "success"
+        }
+      ],
+      "success_count": 10
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tune Problem Prompt"
+  short_description: "Keep prompt templates parseable for ProblemHelper"
+  default_prompt: "Use $tune-problem-prompt to update config.ini prompt templates without breaking ProblemHelper parsing."

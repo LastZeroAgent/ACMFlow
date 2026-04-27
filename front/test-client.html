@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreateProblemAPI Test Client</title>
+    <style>
+        :root {
+            --bg: #f4efe6;
+            --panel: #fffdf8;
+            --ink: #1f2937;
+            --muted: #6b7280;
+            --line: #d9cdbb;
+            --brand: #b45309;
+            --brand-dark: #7c2d12;
+            --ok: #166534;
+            --err: #b91c1c;
+            --shadow: 0 18px 40px rgba(84, 55, 20, 0.12);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(180, 83, 9, 0.12), transparent 28%),
+                linear-gradient(180deg, #fbf7f0 0%, var(--bg) 100%);
+            min-height: 100vh;
+        }
+
+        .shell {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 20px 56px;
+        }
+
+        .hero { margin-bottom: 24px; }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(180, 83, 9, 0.12);
+            color: var(--brand-dark);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 14px 0 10px;
+            font-size: clamp(32px, 5vw, 54px);
+            line-height: 1.02;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-head {
+            padding: 22px 24px 10px;
+            border-bottom: 1px solid rgba(217, 205, 187, 0.6);
+        }
+
+        .card-head h2 { margin: 0 0 6px; font-size: 22px; }
+
+        .card-head p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+        .card-body { padding: 22px 24px 24px; }
+
+        label { display: block; margin-bottom: 10px; font-weight: 600; }
+
+        textarea {
+            width: 100%;
+            min-height: 280px;
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            resize: vertical;
+            font: inherit;
+            line-height: 1.7;
+            background: #fff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: rgba(180, 83, 9, 0.65);
+            box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.12);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        button {
+            appearance: none;
+            border: 0;
+            border-radius: 14px;
+            padding: 14px 18px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+        }
+
+        button:hover { transform: translateY(-1px); }
+        button:disabled { cursor: wait; opacity: 0.7; transform: none; }
+
+        .primary {
+            background: linear-gradient(135deg, #c2410c, #b45309);
+            color: #fff;
+        }
+
+        .secondary {
+            background: #f7efe2;
+            color: var(--brand-dark);
+            border: 1px solid var(--line);
+        }
+
+        .hint-list {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        /* ── Progress section ── */
+        .progress-panel {
+            margin-bottom: 16px;
+            padding: 14px 18px;
+            border-radius: 16px;
+            background: #fbf7f0;
+            border: 1px solid var(--line);
+        }
+
+        .progress-bar-track {
+            height: 6px;
+            border-radius: 999px;
+            background: #e5ddd0;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #c2410c, #f59e0b);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-bar-fill.active {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--muted);
+            transition: color 0.3s ease;
+        }
+
+        .step .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d9cdbb;
+            flex-shrink: 0;
+            transition: background 0.3s ease;
+        }
+
+        .step.done { color: var(--ok); }
+        .step.done .dot { background: var(--ok); }
+        .step.current { color: var(--brand-dark); font-weight: 700; }
+        .step.current .dot {
+            background: var(--brand);
+            box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.2);
+            animation: dotPulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.2); }
+            50% { box-shadow: 0 0 0 8px rgba(180, 83, 9, 0.08); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--line);
+            border-top-color: var(--brand);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            background: #efe8db;
+            color: var(--brand-dark);
+        }
+
+        .status.ok { background: rgba(22, 101, 52, 0.1); color: var(--ok); }
+        .status.err { background: rgba(185, 28, 28, 0.1); color: var(--err); }
+
+        .elapsed {
+            font-size: 12px;
+            color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
+        }
+
+        pre {
+            margin: 0;
+            padding: 16px;
+            min-height: 360px;
+            border-radius: 18px;
+            background: #201813;
+            color: #f8f2eb;
+            overflow: auto;
+            line-height: 1.5;
+            font-family: Consolas, "SFMono-Regular", monospace;
+            font-size: 13px;
+        }
+
+        .api-line {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border: 1px dashed var(--line);
+            border-radius: 14px;
+            color: var(--muted);
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .stats {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .stat-item {
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .stat-item strong { color: var(--ink); }
+
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+            textarea { min-height: 220px; }
+            pre { min-height: 260px; }
+            .progress-steps { flex-wrap: wrap; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <section class="hero">
+            <span class="eyebrow">Local Test Page</span>
+            <h1>创建题目 API 测试台</h1>
+            <p>在这里输入一道算法题的自然语言需求，页面会直接调用本地 <code>CreateProblemAPI</code> 服务的 <code>/promblemserve</code> 接口，并实时展示生成进度和返回结果。</p>
+        </section>
+
+        <section class="grid">
+            <div class="card">
+                <div class="card-head">
+                    <h2>提交 Prompt</h2>
+                    <p>建议写清楚题意、输入输出、数据范围，以及希望生成的题目风格。</p>
+                </div>
+                <div class="card-body">
+                    <label for="prompt">题目需求</label>
+                    <textarea id="prompt">请生成一道 ACM 风格的基础算法题，主题是"判断一个整数是否为回文数"。需要包含：
+
+1. 题目描述
+2. 输入格式
+3. 输出格式
+4. 至少 2 个样例
+5. 详细题解思路
+6. Python / C++ / Java 三种参考代码
+7. 至少 5 组测试用例</textarea>
+                    <div class="actions">
+                        <button id="submitBtn" class="primary">调用创建题目 API</button>
+                        <button id="fillBtn" class="secondary" type="button">填入另一个示例</button>
+                    </div>
+                    <div class="api-line">
+                        当前调用地址：<code>GET /promblemserve?Prompt=...</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>返回结果</h2>
+                    <p>实时显示生成进度、接口状态和完整返回数据。</p>
+                </div>
+                <div class="card-body">
+                    <!-- Progress panel -->
+                    <div id="progressPanel" class="progress-panel" style="display:none;">
+                        <div class="progress-bar-track">
+                            <div id="progressBar" class="progress-bar-fill"></div>
+                        </div>
+                        <div class="progress-steps">
+                            <div class="step" id="step1">
+                                <span class="dot"></span>发送请求
+                            </div>
+                            <div class="step" id="step2">
+                                <span class="dot"></span>AI 生成中
+                            </div>
+                            <div class="step" id="step3">
+                                <span class="dot"></span>解析保存
+                            </div>
+                        </div>
+                        <div style="font-size:13px; color:var(--muted);" id="progressMsg">准备中...</div>
+                    </div>
+
+                    <div id="status" class="status">等待请求</div>
+                    <div class="stats" id="statsRow" style="display:none;">
+                        <span class="stat-item">耗时：<strong id="elapsedTime">--</strong></span>
+                        <span class="stat-item" id="statTitle" style="display:none;">标题：<strong id="statTitleVal"></strong></span>
+                        <span class="stat-item" id="statCases" style="display:none;">测试用例：<strong id="statCasesVal"></strong></span>
+                        <span class="stat-item" id="statPath" style="display:none;">保存路径：<strong id="statPathVal"></strong></span>
+                    </div>
+                    <pre id="result">{
+  "message": "点击左侧按钮后，这里会显示接口返回内容"
+}</pre>
+                    <div style="margin-top: 18px;">
+                        <strong>测试建议</strong>
+                        <ul class="hint-list">
+                            <li>先确认服务已启动，再点击调用按钮。</li>
+                            <li>如果返回 500，优先检查 <code>config.ini</code> 中模型配置是否可用。</li>
+                            <li>生成成功后，结果文件会写入 <code>problem/normal/</code>。</li>
+                            <li>AI 生成大约需要 10-60 秒，请耐心等待。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const promptEl = document.getElementById("prompt");
+        const submitBtn = document.getElementById("submitBtn");
+        const fillBtn = document.getElementById("fillBtn");
+        const statusEl = document.getElementById("status");
+        const resultEl = document.getElementById("result");
+        const progressPanel = document.getElementById("progressPanel");
+        const progressBar = document.getElementById("progressBar");
+        const progressMsg = document.getElementById("progressMsg");
+        const statsRow = document.getElementById("statsRow");
+        const elapsedEl = document.getElementById("elapsedTime");
+
+        const altPrompt = `请生成一道 ACM 风格的入门算法题，主题是"计算两个整数的最大公约数"。需要包含完整题面、样例、题解、三种语言参考代码，以及不少于 6 组测试数据。`;
+
+        let startTime = 0;
+        let timerInterval = null;
+        let progressTimer = null;
+
+        function updateStep(stepNum) {
+            for (let i = 1; i <= 3; i++) {
+                const step = document.getElementById("step" + i);
+                step.classList.remove("done", "current");
+                if (i < stepNum) step.classList.add("done");
+                if (i === stepNum) step.classList.add("current");
+            }
+            const pcts = [0, 15, 55, 95];
+            progressBar.style.width = pcts[stepNum] + "%";
+        }
+
+        function setStatus(text, kind = "") {
+            statusEl.innerHTML = text;
+            statusEl.className = "status" + (kind ? ` ${kind}` : "");
+        }
+
+        function startProgress() {
+            startTime = Date.now();
+            progressPanel.style.display = "block";
+            progressBar.style.width = "10%";
+            progressBar.classList.add("active");
+            statsRow.style.display = "none";
+            updateStep(1);
+            progressMsg.textContent = "正在向服务端发送请求...";
+            setStatus('<span class="spinner"></span>请求进行中...', "");
+
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                elapsedEl.textContent = elapsed + " 秒";
+            }, 1000);
+
+            // Simulate progressing through stages based on elapsed time
+            progressTimer = setTimeout(() => {
+                updateStep(2);
+                progressBar.style.width = "45%";
+                progressMsg.textContent = "AI 模型正在生成题目（通常需要 10-60 秒），请耐心等待...";
+                setStatus('<span class="spinner"></span>AI 生成中...', "");
+            }, 2000);
+        }
+
+        function finishProgress(success) {
+            clearInterval(timerInterval);
+            clearTimeout(progressTimer);
+            progressBar.classList.remove("active");
+
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            elapsedEl.textContent = elapsed + " 秒";
+            statsRow.style.display = "flex";
+
+            if (success) {
+                updateStep(3);
+                progressBar.style.width = "100%";
+                progressMsg.textContent = "题目生成并保存完成！";
+                setStatus("请求成功", "ok");
+            } else {
+                progressBar.style.width = "100%";
+                progressBar.style.background = "var(--err)";
+                progressMsg.textContent = "生成过程出现错误";
+                setStatus("请求失败", "err");
+            }
+        }
+
+        function updateResultStats(data) {
+            if (data.save_result) {
+                const sr = data.save_result;
+                if (sr.title && sr.title !== "未知题目") {
+                    document.getElementById("statTitle").style.display = "";
+                    document.getElementById("statTitleVal").textContent = sr.title;
+                }
+                if (sr.path) {
+                    document.getElementById("statPath").style.display = "";
+                    document.getElementById("statPathVal").textContent = sr.path;
+                }
+                if (sr.testcase_count !== undefined) {
+                    document.getElementById("statCases").style.display = "";
+                    document.getElementById("statCasesVal").textContent = sr.testcase_count + " 组";
+                }
+            }
+        }
+
+        async function callApi() {
+            const prompt = promptEl.value.trim();
+            if (!prompt) {
+                setStatus("请输入题目需求", "err");
+                resultEl.textContent = JSON.stringify({ error: "Prompt 不能为空" }, null, 2);
+                progressPanel.style.display = "none";
+                return;
+            }
+
+            submitBtn.disabled = true;
+            resultEl.textContent = "正在调用本地 API，请稍候...";
+            startProgress();
+
+            try {
+                const response = await fetch(`/promblemserve?Prompt=${encodeURIComponent(prompt)}`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    finishProgress(false);
+                    resultEl.textContent = JSON.stringify(data, null, 2);
+                    return;
+                }
+
+                finishProgress(true);
+                resultEl.textContent = JSON.stringify(data, null, 2);
+                updateResultStats(data);
+            } catch (error) {
+                finishProgress(false);
+                resultEl.textContent = JSON.stringify({
+                    error: String(error),
+                    hint: "请确认服务已启动（python main.py）且端口可访问"
+                }, null, 2);
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        submitBtn.addEventListener("click", callApi);
+        fillBtn.addEventListener("click", () => {
+            promptEl.value = altPrompt;
+        });
+    </script>
+</body>
+</html>

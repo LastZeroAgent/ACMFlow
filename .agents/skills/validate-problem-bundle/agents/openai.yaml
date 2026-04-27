@@ -1,0 +1,4 @@
+interface:
+  display_name: "Validate Problem Bundle"
+  short_description: "Check problem folders for missing or inconsistent files"
+  default_prompt: "Use $validate-problem-bundle to inspect a generated problem folder before or after parser changes."
