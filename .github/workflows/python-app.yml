@@ -29,7 +29,7 @@ jobs:
         if [ -f requirements.txt ]; then
           pip install -r requirements.txt
         else
-          pip install fastapi uvicorn openai requests pytest flake8
+          pip install fastapi uvicorn openai requests pytest pytest-asyncio flake8
         fi
     - name: Lint with flake8
       run: |
