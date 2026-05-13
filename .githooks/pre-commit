@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Pre-commit hook: lint staged Python files and run tests.
+# Exits non-zero to block the commit on failure.
+
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$ROOT_DIR"
+
+# Activate virtual environment if present
+if [ -f "$ROOT_DIR/.venv/Scripts/activate" ]; then
+    source "$ROOT_DIR/.venv/Scripts/activate"
+elif [ -f "$ROOT_DIR/.venv/bin/activate" ]; then
+    source "$ROOT_DIR/.venv/bin/activate"
+fi
+
+# Ensure required tools are available
+MISSING_TOOLS=""
+command -v flake8 >/dev/null 2>&1 || MISSING_TOOLS="$MISSING_TOOLS flake8"
+command -v pytest  >/dev/null 2>&1 || MISSING_TOOLS="$MISSING_TOOLS pytest"
+
+if [ -n "$MISSING_TOOLS" ]; then
+    echo "警告: 以下工具未安装，跳过对应检查:$MISSING_TOOLS"
+    echo "请运行: pip install flake8 pytest pytest-asyncio"
+    exit 0
+fi
+
+echo "========================================"
+echo "  Pre-commit: flake8 lint"
+echo "========================================"
+
+flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+LINT_EXIT=$?
+
+if [ $LINT_EXIT -ne 0 ]; then
+    echo ""
+    echo "flake8 发现语法错误或未定义名称，提交已阻止。"
+    exit 1
+fi
+
+echo "flake8 通过，无致命错误。"
+echo ""
+
+echo "========================================"
+echo "  Pre-commit: pytest"
+echo "========================================"
+
+pytest --tb=short -q
+TEST_EXIT=$?
+
+if [ $TEST_EXIT -ne 0 ]; then
+    echo ""
+    echo "pytest 测试未通过，提交已阻止。"
+    exit 1
+fi
+
+echo ""
+echo "全部检查通过，允许提交。"
+exit 0
