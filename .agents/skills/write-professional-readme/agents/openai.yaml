@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Professional README"
+  short_description: "Create polished, accurate project README files"
+  default_prompt: "Use $write-professional-readme to generate or improve a professional README for this project."
