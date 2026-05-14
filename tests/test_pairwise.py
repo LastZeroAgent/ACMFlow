@@ -1,3 +1,14 @@
+"""
+对拍工具集成测试模块。
+
+以异步方式验证 pairwise 模块的三个核心能力:
+  1. 单个代码文件运行
+  2. 多个代码文件输出对比
+  3. 整个题目目录的对拍
+
+需要在 problem/normal/ 下有已生成的题目数据才可运行。
+"""
+
 from __future__ import annotations
 
 import asyncio
@@ -15,6 +26,7 @@ PROBLEM_DIR = "problem/normal/回文数判定"
 
 
 async def test_single_solution() -> None:
+    """测试1: 运行单个 Python 代码文件并检查输出。"""
     print("=" * 60)
     print("测试1: 运行单个 Python 解决方案")
     print("=" * 60)
@@ -33,6 +45,7 @@ async def test_single_solution() -> None:
 
 
 async def test_compare_solutions_case() -> None:
+    """测试2: 对拍 Python 和 C++ 两个解决方案的输出一致性。"""
     print("=" * 60)
     print("测试2: 对拍多个解决方案")
     print("=" * 60)
@@ -48,6 +61,7 @@ async def test_compare_solutions_case() -> None:
 
 
 async def test_compare_problem_case() -> None:
+    """测试3: 对拍整个题目目录下的所有代码实现。"""
     print("=" * 60)
     print("测试3: 对拍整个题目")
     print("=" * 60)
@@ -63,6 +77,7 @@ async def test_compare_problem_case() -> None:
 
 
 async def main() -> None:
+    """顺序执行三个集成测试用例。"""
     print("\n开始对拍工具测试...\n")
     for test_func in (test_single_solution, test_compare_solutions_case, test_compare_problem_case):
         try:

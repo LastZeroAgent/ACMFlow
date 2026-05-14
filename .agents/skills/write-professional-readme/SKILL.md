@@ -59,7 +59,7 @@ Choose only the sections that fit the project:
 
 ## Repository-Specific Guardrails
 
-For this CreateProblemAPI repository:
+For this ACMFlow repository:
 
 - Treat `config.ini` as secret-bearing. Mention how to configure it, but do not print credentials.
 - Preserve the `/promblemserve` endpoint spelling unless the user explicitly asks to rename it.

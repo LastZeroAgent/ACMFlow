@@ -1,3 +1,12 @@
+"""
+对拍工具快速演示脚本。
+
+依次运行三个典型用例:
+  1. 对拍验证整个题目目录
+  2. 单测试用例调试（多个输入）
+  3. 生成并保存对拍报告 JSON
+"""
+
 from __future__ import annotations
 
 import asyncio
@@ -17,6 +26,7 @@ REPORT_FILE = Path("reports/pairwise_report.json")
 
 
 async def quick_verify() -> None:
+    """步骤1: 对拍验证整个题目目录。"""
     print("\n" + "=" * 70)
     print("快速验证示例")
     print("=" * 70 + "\n")
@@ -28,6 +38,7 @@ async def quick_verify() -> None:
 
 
 async def single_test_debug() -> None:
+    """步骤2: 用多个输入调试单个 Python 解法。"""
     print("\n" + "=" * 70)
     print("单个测试调试")
     print("=" * 70 + "\n")
@@ -39,6 +50,7 @@ async def single_test_debug() -> None:
 
 
 async def save_report() -> None:
+    """步骤3: 生成对拍报告并保存为 JSON 文件。"""
     result = await compare_problem(PROBLEM_DIR)
     REPORT_FILE.parent.mkdir(exist_ok=True)
     report = {
@@ -53,6 +65,7 @@ async def save_report() -> None:
 
 
 async def main() -> None:
+    """按步骤执行快速演示流程。"""
     await quick_verify()
     await single_test_debug()
     await save_report()

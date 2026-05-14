@@ -1,3 +1,16 @@
+"""
+题目解析与持久化模块。
+
+负责将 LLM 返回的 Markdown 响应解析为结构化的题目包，包含:
+  - 题目描述 (problem.md)
+  - 题解说明 (solution.md)
+  - 多语言参考代码 (code/)
+  - 测试用例 (testcases/)
+  - 元数据 (metadata.json)
+
+解析采用多模式正则策略，按优先级尝试多种 Markdown 格式，兼容不同 LLM 的输出习惯。
+"""
+
 from __future__ import annotations
 
 import json
@@ -7,7 +20,6 @@ from datetime import datetime
 from pathlib import Path
 
 from .config import PROJECT_ROOT, load_config
-
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +67,18 @@ class ProblemHelper:
         self.problem_dir.mkdir(parents=True, exist_ok=True)
 
     def format_and_save_problem(self, ai_response: str) -> dict:
+        """
+        主入口：解析 LLM 返回的 Markdown 并落盘为完整题目包。
+
+        依次提取标题、题目描述、测试用例、题解、代码文件和元数据，
+        写入 problem/normal/<title>/ 目录结构。
+
+        参数:
+            ai_response: LLM 返回的原始 Markdown 文本
+
+        返回:
+            dict 包含 status / title / path / testcase_count / code_file_count 等
+        """
         try:
             title = self._extract_title(ai_response)
             if not title:
@@ -117,6 +141,7 @@ class ProblemHelper:
             return {"status": "error", "message": f"处理题目时出错: {exc}"}
 
     def _extract_title(self, content: str) -> str:
+        """按多优先级正则匹配提取题目标题，失败返回 '未知题目'。"""
         patterns = [
             r"# (.*?)\n",
             r"题目文件[：:]\s*`(.*?)\.md`",
@@ -153,6 +178,7 @@ class ProblemHelper:
         return filename or "untitled_problem"
 
     def _save_problem_description(self, problem_folder: Path, content: str, title: str) -> None:
+        """提取题目正文并写入 problem.md。"""
         problem_content = self._extract_problem_content(content, title)
         formatted_content = self._format_acm_problem(problem_content, title)
         (problem_folder / "problem.md").write_text(formatted_content, encoding="utf-8")
@@ -293,6 +319,7 @@ class ProblemHelper:
         return [(self._clean_br(inp), self._clean_br(out)) for inp, out in examples]
 
     def _save_testcases(self, testcases_dir: Path, content: str) -> int:
+        """解析并保存测试用例到 *.in /*.out 文件，返回用例数量。"""
         test_cases = self._extract_test_cases(content)
         for index, (input_data, output_data) in enumerate(test_cases, 1):
             input_text = self._clean_br(input_data.replace("\\n", "\n"))
@@ -303,6 +330,12 @@ class ProblemHelper:
         return len(test_cases)
 
     def _extract_test_cases(self, content: str) -> list[tuple[str, str]]:
+        """
+        多策略提取测试用例。
+
+        优先级从高到低尝试 6 种正则模式，适配不同 LLM 的输出风格，
+        包括粗体标记、编号标题、纯围栏代码块、表格和文件列表。
+        """
         test_cases: list[tuple[str, str]] = []
 
         # Pattern 1: Bold caseN.in / caseN.out blocks
@@ -368,6 +401,7 @@ class ProblemHelper:
         return test_cases
 
     def _save_solution(self, problem_folder: Path, content: str, title: str) -> None:
+        """提取题解内容并写入 solution.md。"""
         solution_content = self._extract_solution_content(content)
         if solution_content:
             formatted_solution = self._format_solution(solution_content, title)
@@ -446,6 +480,7 @@ class ProblemHelper:
 """
 
     def _save_metadata(self, problem_folder: Path, title: str, testcase_count: int = 0) -> None:
+        """生成并写入 metadata.json。"""
         metadata = {
             "title": title,
             "created_at": datetime.now().isoformat(),
@@ -462,6 +497,7 @@ class ProblemHelper:
         )
 
     def _save_code_files(self, problem_folder: Path, content: str) -> int:
+        """解析多语言代码块并写入 code/ 目录，返回保存的代码文件数。"""
         code_dir = problem_folder / "code"
         code_dir.mkdir(exist_ok=True)
 
@@ -487,6 +523,7 @@ class ProblemHelper:
         return len(code_blocks)
 
     def _extract_code_blocks(self, content: str) -> list[tuple[str, str]]:
+        """从 Markdown 中提取所有受支持语言的围栏代码块。"""
         code_blocks: list[tuple[str, str]] = []
         code_pattern = r"```(\w+)\n(.*?)\n```"
         for language, code in re.findall(code_pattern, content, re.DOTALL):
@@ -512,6 +549,7 @@ class ProblemHelper:
         return code_blocks
 
     def _extract_solution_code_blocks(self, content: str) -> list[tuple[str, str]]:
+        """从题解区域单独提取代码块，补充主代码块列表。"""
         code_blocks: list[tuple[str, str]] = []
         solution_match = re.search(r"\[详细的解题思路分析\]\n(.*?)(?=\n\[|$)", content, re.DOTALL)
         if not solution_match:
@@ -561,4 +599,5 @@ class ProblemHelper:
 
 
 def process_problem(ai_response: str) -> dict:
+    """便捷函数：一行调用完成解析和保存。"""
     return ProblemHelper().format_and_save_problem(ai_response)

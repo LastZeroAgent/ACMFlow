@@ -33,7 +33,7 @@
 ## 项目结构
 
 ```
-CreateProblemAPI/
+ACMFlow/
 ├── main.py                             # 服务启动入口
 ├── config.ini                          # 配置文件（API 密钥、Prompt 模板）
 ├── pytest.ini                          # Pytest 配置
@@ -88,7 +88,7 @@ CreateProblemAPI/
 
 ```bash
 git clone <repo-url>
-cd CreateProblemAPI
+cd ACMFlow
 
 # 创建并激活虚拟环境
 python -m venv .venv

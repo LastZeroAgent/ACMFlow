@@ -1,3 +1,14 @@
+"""
+对拍工具完整示例集。
+
+展示 pairwise 模块的全部使用模式:
+  1. 批量验证所有题目
+  2. 调试单个题目
+  3. 交互式对比两个解法
+  4. 单输入验证
+  5. 生成报告
+"""
+
 from __future__ import annotations
 
 import asyncio
@@ -17,6 +28,7 @@ REPORT_FILE = Path("reports/pairwise_report.json")
 
 
 async def example_1_verify_all_problems() -> None:
+    """示例1: 批量验证 problem/normal/ 下所有题目。"""
     print("\n" + "=" * 70)
     print("示例1: 批量验证全部题目")
     print("=" * 70)
@@ -36,6 +48,7 @@ async def example_1_verify_all_problems() -> None:
 
 
 async def example_2_debug_specific_problem() -> None:
+    """示例2: 调试特定题目的完整对拍结果。"""
     print("\n" + "=" * 70)
     print("示例2: 调试单个题目")
     print("=" * 70)
@@ -44,6 +57,7 @@ async def example_2_debug_specific_problem() -> None:
 
 
 async def example_3_interactive_comparison() -> None:
+    """示例3: 对比两个 Python 解法文件的输出一致性。"""
     print("\n" + "=" * 70)
     print("示例3: 比较两个解法")
     print("=" * 70)
@@ -55,6 +69,7 @@ async def example_3_interactive_comparison() -> None:
 
 
 async def example_4_validate_single_test() -> None:
+    """示例4: 验证单个测试输入的代码输出。"""
     print("\n" + "=" * 70)
     print("示例4: 调试单个输入")
     print("=" * 70)
@@ -63,6 +78,7 @@ async def example_4_validate_single_test() -> None:
 
 
 async def example_5_generate_report() -> None:
+    """示例5: 对拍并生成 JSON 报告文件。"""
     result = await compare_problem(PROBLEM_DIR)
     REPORT_FILE.parent.mkdir(exist_ok=True)
     REPORT_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -70,6 +86,7 @@ async def example_5_generate_report() -> None:
 
 
 async def main() -> None:
+    """顺序执行全部 5 个示例。"""
     await example_1_verify_all_problems()
     await example_2_debug_specific_problem()
     await example_3_interactive_comparison()
